@@ -230,6 +230,41 @@ body.unlocked .app-lock{display:flex}
 #v-temuan .dt-ket{margin-top:10px;font-size:.95rem;white-space:pre-wrap;overflow-wrap:anywhere}
 #v-temuan .dt-x{position:absolute;top:10px;right:10px;width:44px;height:44px;border:0;border-radius:12px;background:rgba(0,0,0,.6);color:#fff;font-size:18px;cursor:pointer;z-index:2}
 
+/* efektivitas penyelesaian */
+#v-temuan .eff{display:flex;flex-direction:column;gap:10px}
+#v-temuan .eff-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#v-temuan .eff-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+#v-temuan .stat em{display:block;font-style:normal;font-size:.72rem;color:var(--muted);margin-top:2px;overflow-wrap:anywhere}
+#v-temuan .stat b .u{font-size:.8rem;font-weight:600;color:var(--muted)}
+#v-temuan .panel-c{background:var(--card);border-radius:14px;padding:14px;box-shadow:0 2px 8px rgba(15,23,42,.08);min-width:0}
+#v-temuan .panel-c h3{font-size:.92rem;margin-bottom:12px;display:flex;flex-wrap:wrap;gap:2px 8px;align-items:baseline}
+#v-temuan .panel-c h3 small{font-size:.72rem;font-weight:400;color:var(--muted)}
+#v-temuan .empty-s{font-size:.85rem;color:var(--muted);text-align:center;padding:14px 0}
+/* sebaran */
+#v-temuan .dist{display:flex;flex-direction:column;gap:12px}
+#v-temuan .dist-row{display:grid;grid-template-columns:96px minmax(0,1fr) 78px;align-items:center;gap:10px;font-size:.82rem}
+#v-temuan .dist-track{height:14px;background:var(--line);border-radius:99px;overflow:hidden}
+#v-temuan .dist-track i{display:block;height:100%;border-radius:99px}
+#v-temuan .dist-val{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+#v-temuan .dist-val small{font-weight:400;color:var(--muted)}
+/* tren */
+#v-temuan .trend-plot{position:relative;height:120px;margin-top:22px;display:flex;gap:6px;border-bottom:1px solid var(--line)}
+#v-temuan .trend-target{position:absolute;left:0;right:0;border-top:2px dashed #94a3b8;pointer-events:none}
+#v-temuan .trend-col{flex:1;min-width:0;height:100%;display:flex;align-items:flex-end;justify-content:center}
+#v-temuan .trend-col i{display:block;position:relative;width:70%;max-width:40px;border-radius:6px 6px 2px 2px}
+#v-temuan .trend-col i.ok{background:#16a34a}
+#v-temuan .trend-col i.warn{background:#d97706}
+#v-temuan .trend-col i span{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);padding-bottom:2px;font-size:.7rem;font-weight:600;white-space:nowrap}
+#v-temuan .trend-labels{display:flex;gap:6px;margin-top:6px}
+#v-temuan .trend-labels div{flex:1;min-width:0;text-align:center}
+#v-temuan .trend-labels b{display:block;font-size:.72rem;font-weight:600}
+#v-temuan .trend-labels small{display:block;font-size:.65rem;color:var(--muted)}
+/* badge & detail */
+#v-temuan .badge.bad{background:#fee2e2;color:#991b1b}
+#v-temuan .dt-dur{font-size:.82rem;color:var(--muted);margin-top:8px}
+@media(min-width:640px){ #v-temuan .eff-kpis{grid-template-columns:repeat(4,minmax(0,1fr))} }
+@media(min-width:800px){ #v-temuan .eff-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+
 /* HP kecil */
 @media(max-width:359px){
   #v-temuan .stat b{font-size:1.3rem}
@@ -281,7 +316,6 @@ body.unlocked .app-lock{display:flex}
 #v-form #fm-msg.ok{display:block; background:#e6f4ea; color:#137333;}
 #v-form #fm-msg.err{display:block; background:#fce8e6; color:#c5221f;}
 #v-form .req{color:#d93025;}
-@media(min-width:640px){
   #v-form #fm-cari{width:100%; min-height:46px; padding:10px 12px; border:1px solid var(--border); border-radius:8px; font-size:16px; font-family:inherit; background:#fff; color:var(--text);}
 #v-form .fm-list{display:flex; flex-direction:column; gap:8px; margin-top:12px; max-height:340px; overflow-y:auto; overscroll-behavior:contain; padding:2px;}
 #v-form .fm-note{margin:8px 0; padding:14px; text-align:center; color:#5f6368; font-size:14px; background:var(--bg); border-radius:8px;}
@@ -294,6 +328,10 @@ body.unlocked .app-lock{display:flex}
 #v-form .fm-st{font-size:12px; font-weight:600; padding:2px 8px; border-radius:99px;}
 #v-form .fm-st.ok{background:#e6f4ea; color:#137333;}
 #v-form .fm-st.warn{background:#fef3c7; color:#92400e;}
+@media(min-width:640px){
+  #v-form{padding:16px}
+  #v-form .card{margin:24px auto; padding:24px}
+}
 /* ===== Penyesuaian akhir (menu samping) ===== */
 
 @media(min-width:900px){
@@ -441,7 +479,29 @@ body.unlocked .app-lock{display:flex}
 
   <h2>Temuan Hari Ini <span class="tag" id="tm-todayTag"></span></h2>
   <div id="tm-todayGrid" class="grid"><div class="loading">Memuat data…</div></div>
-
+  <h2>Efektivitas Penyelesaian <span class="tag" id="tm-targetTag"></span></h2>
+  <div class="eff">
+    <div class="eff-kpis">
+      <div class="stat"><small>Rata-rata penyelesaian</small><b id="tm-eAvg">-</b><em id="tm-eAvgSub"></em></div>
+      <div class="stat ok"><small>Selesai tepat waktu</small><b id="tm-eOnTime">-</b><em id="tm-eOnTimeSub"></em></div>
+      <div class="stat warn"><small>Tertunggak</small><b id="tm-eLate">-</b><em id="tm-eLateSub"></em></div>
+      <div class="stat"><small>Terlama belum selesai</small><b id="tm-eOld">-</b><em id="tm-eOldSub"></em></div>
+    </div>
+    <div class="eff-grid">
+      <div class="panel-c">
+        <h3>Lama penyelesaian</h3>
+        <div id="tm-eDist"></div>
+      </div>
+      <div class="panel-c">
+        <h3>Tren rata-rata per bulan <small>hari · garis putus = target</small></h3>
+        <div id="tm-eTrend"></div>
+      </div>
+    </div>
+    <div class="panel-c">
+      <h3>Belum selesai terlama</h3>
+      <div id="tm-eOpen" class="list"></div>
+    </div>
+  </div>
   <h2>Semua Temuan</h2>
   <div class="tools">
     <input id="tm-q" type="search" placeholder="Cari keterangan…">
@@ -461,13 +521,15 @@ body.unlocked .app-lock{display:flex}
     <div class="dt-body">
       <div class="dt-date" id="tm-lbDate"></div>
       <div id="tm-lbBadge"></div>
+            <div id="tm-lbBadge"></div>
+      <div class="dt-dur" id="tm-lbDur"></div>
       <p class="dt-ket" id="tm-lbKet"></p>
     </div>
   </div>
 </div>
 
 </section>
-html
+
 <section id="v-form" class="view" hidden>
 <div class="card">
   <h1>Form Temuan</h1>
@@ -623,7 +685,81 @@ function fmtDay(t){
   return new Date(y,m-1,d).toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 }
 const fmtN = n => n === null ? '–' : n.toLocaleString('id-ID',{maximumFractionDigits:2});
+function renderEff(t){
+  const doneAll = DATA.filter(d=>isDone(d.status));
+  const timed = doneAll.map(d=>({d, n:daysBetween(d.tanggal,d.selesai)})).filter(x=>x.n!==null);
+  const noDate = doneAll.length - timed.length;
+  const open = DATA.filter(d=>!isDone(d.status)).map(d=>({d, n:daysBetween(d.tanggal,t)})).filter(x=>x.n!==null);
+  const unit = u => '<span class="u">'+u+'</span>';
+  const cnt = timed.length;
+  $('targetTag').textContent = 'Target ≤ ' + TARGET_HARI + ' hari';
 
+  // kartu ringkas
+  if(cnt){
+    const avg = timed.reduce((s,x)=>s+x.n,0)/cnt;
+    const onTime = timed.filter(x=>x.n<=TARGET_HARI).length;
+    $('eAvg').innerHTML = fmtNum(avg) + unit(' hari');
+    $('eAvgSub').textContent = 'dari ' + cnt + ' temuan selesai' + (noDate ? ' · ' + noDate + ' tanpa tgl selesai' : '');
+    $('eOnTime').innerHTML = Math.round(onTime/cnt*100) + unit('%');
+    $('eOnTimeSub').textContent = onTime + ' dari ' + cnt + ' selesai ≤ ' + TARGET_HARI + ' hari';
+  } else {
+    $('eAvg').textContent = '–';
+    $('eAvgSub').textContent = doneAll.length ? noDate + ' temuan selesai belum punya tanggal selesai' : 'Belum ada temuan selesai';
+    $('eOnTime').textContent = '–';
+    $('eOnTimeSub').textContent = '';
+  }
+  const late = open.filter(x=>x.n>TARGET_HARI).length;
+  $('eLate').textContent = late;
+  $('eLateSub').textContent = 'dari ' + open.length + ' belum selesai, > ' + TARGET_HARI + ' hari';
+  const oldest = open.slice().sort((a,b)=>b.n-a.n);
+  if(oldest.length){
+    $('eOld').innerHTML = oldest[0].n + unit(' hari');
+    $('eOldSub').textContent = shortTxt(oldest[0].d.keterangan, 32);
+  } else {
+    $('eOld').textContent = '–';
+    $('eOldSub').textContent = 'Tidak ada yang tertunda';
+  }
+
+  // sebaran lama penyelesaian
+  if(cnt){
+    const B = [['Hari yang sama',n=>n===0,'#16a34a'],['1–2 hari',n=>n>=1&&n<=2,'#65a30d'],['3–7 hari',n=>n>=3&&n<=7,'#d97706'],['> 7 hari',n=>n>7,'#dc2626']];
+    $('eDist').innerHTML = '<div class="dist">' + B.map(([lb,fn,col])=>{
+      const c = timed.filter(x=>fn(x.n)).length, p = Math.round(c/cnt*100);
+      return `<div class="dist-row"><span>${lb}</span><div class="dist-track"><i style="width:${p}%;background:${col}"></i></div><span class="dist-val">${c} <small>(${p}%)</small></span></div>`;
+    }).join('') + '</div>';
+  } else {
+    $('eDist').innerHTML = '<div class="empty-s">Belum ada temuan selesai yang punya tanggal selesai.</div>';
+  }
+
+  // tren rata-rata per bulan (6 bulan terakhir, berdasarkan bulan selesai)
+  const [ty,tm] = t.split('-').map(Number), months = [];
+  for(let i=5;i>=0;i--){ const dt = new Date(ty,tm-1-i,1); months.push(dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')); }
+  const agg = {};
+  timed.forEach(x=>{ const k = x.d.selesai.slice(0,7); (agg[k] = agg[k] || []).push(x.n); });
+  const vals = months.map(k => agg[k] ? agg[k].reduce((a,b)=>a+b,0)/agg[k].length : null);
+  if(vals.some(v=>v!==null)){
+    const max = Math.max(TARGET_HARI*1.25, ...vals.filter(v=>v!==null), 1);
+    const lbl = k => { const [y,m] = k.split('-').map(Number); return new Date(y,m-1,1).toLocaleDateString('id-ID',{month:'short',year:'2-digit'}); };
+    $('eTrend').innerHTML = `<div class="trend-plot">
+        <div class="trend-target" style="bottom:${TARGET_HARI/max*100}%"></div>
+        ${vals.map(v => `<div class="trend-col">${v===null ? '' : `<i class="${v<=TARGET_HARI?'ok':'warn'}" style="height:${Math.max(v/max*100,2)}%"><span>${fmtNum(v)}</span></i>`}</div>`).join('')}
+      </div>
+      <div class="trend-labels">${months.map(k => `<div><b>${lbl(k)}</b><small>${agg[k] ? 'n=' + agg[k].length : '–'}</small></div>`).join('')}</div>`;
+  } else {
+    $('eTrend').innerHTML = '<div class="empty-s">Belum ada data tren.</div>';
+  }
+
+  // 5 temuan belum selesai terlama
+  $('eOpen').innerHTML = oldest.length ? oldest.slice(0,5).map(x => `
+    <div class="row" data-i="${DATA.indexOf(x.d)}" tabindex="0" role="button">
+      <div class="th">${imgTag(x.d.foto, x.d.keterangan)}</div>
+      <div class="info">
+        <div class="d">${fmtDate(x.d.tanggal)}</div>
+        <div class="k">${esc(x.d.keterangan)}</div>
+      </div>
+      <span class="badge ${x.n>TARGET_HARI?'bad':'warn'}">${ageText(x.n)}</span>
+    </div>`).join('') : '<div class="empty-s">Semua temuan sudah selesai.</div>';
+}
 function render(){
   const all = state.rows, rows = filtered();
   const cnt = k => rows.filter(r => r.status === k).length;
@@ -745,9 +881,11 @@ load();
 })();</script>
 <script>(function(){
 
-// ====== GANTI DENGAN URL WEB APP APPS SCRIPT ANDA ======
-const URL_APPSCRIPT = "https://script.google.com/macros/s/AKfycbwXjBwTdKtnsuypVlTQUerzRbNwd2CdDBpqEdrBY110c8x6NAOrtfC_reYU368Jeq9puQ/exec";
-// ========================================================
+// ====== URL WEB APP APPS SCRIPT (sama dengan yang dipakai Form Temuan) ======
+const URL_APPSCRIPT = "https://script.google.com/macros/s/AKfycbw-vafLbkuu71japxJGQMZxCZ1NDXuj4odhVdVdX1IPkud35j0XYKeu0YONU9kQan8fOw/exec";
+// ====== TARGET: temuan dianggap tepat waktu bila selesai dalam ≤ sekian hari ======
+const TARGET_HARI = 3;
+// ===============================================================================
 
 const $ = id => document.getElementById('tm-'+id);
 const root = document.getElementById('v-temuan');
@@ -779,6 +917,13 @@ const imgTag = (u,alt) => u
   : 'Tanpa foto';
 const badge = s => `<span class="badge ${isDone(s)?'ok':'warn'}">${esc(s||'Belum diisi')}</span>`;
 
+// ----- helper hitung hari -----
+const dayNum = s => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s||''); return m ? Date.UTC(+m[1],+m[2]-1,+m[3])/86400000 : null; };
+const daysBetween = (a,b) => { const x = dayNum(a), y = dayNum(b); return (x===null||y===null) ? null : Math.max(0, Math.round(y-x)); };
+const fmtNum = n => n.toLocaleString('id-ID',{maximumFractionDigits:1});
+const ageText = n => n===0 ? 'Hari ini' : n+' hari';
+const shortTxt = (s,len=40) => { const t = String(s||'').replace(/\s+/g,' ').trim(); return t.length>len ? t.slice(0,len)+'…' : t; };
+
 function openDetail(i){
   const d = DATA[i]; if(!d) return;
   $('lbImgWrap').innerHTML = d.foto
@@ -787,6 +932,19 @@ function openDetail(i){
   $('lbDate').textContent = fmtDate(d.tanggal);
   $('lbBadge').innerHTML = badge(d.status);
   $('lbKet').textContent = d.keterangan || '(Tanpa keterangan)';
+  const durEl = $('lbDur');
+  if(durEl){
+    let dur = '';
+    if (isDone(d.status)) {
+      if (!d.selesai) dur = 'Tanggal selesai belum tercatat';
+      else { const n = daysBetween(d.tanggal, d.selesai);
+        dur = n===null ? '' : 'Selesai ' + fmtDate(d.selesai) + ' · ' + (n===0 ? 'dikerjakan di hari yang sama' : 'dikerjakan dalam ' + n + ' hari'); }
+    } else {
+      const n = daysBetween(d.tanggal, todayStr());
+      dur = n===null ? '' : (n===0 ? 'Dicatat hari ini' : 'Sudah berjalan ' + n + ' hari' + (n > TARGET_HARI ? ' (melewati target)' : ''));
+    }
+    durEl.textContent = dur;
+  }
   $('lb').style.display = 'flex';
 }
 function closeDetail(){ $('lb').style.display = 'none'; $('lbImgWrap').innerHTML = ''; }
@@ -797,12 +955,89 @@ async function load(){
     const res = await fetch(URL_APPSCRIPT);
     const json = await res.json();
     if(!json.ok) throw new Error(json.error||'Gagal memuat data');
-    DATA = json.data.map(d => ({...d, tanggal: normDate(d.tanggal)})).sort((a,b)=> (b.tanggal||'').localeCompare(a.tanggal||''));
+    DATA = json.data.map(d => ({...d, tanggal: normDate(d.tanggal), selesai: normDate(d.selesai)})).sort((a,b)=> (b.tanggal||'').localeCompare(a.tanggal||''));
     render();
   }catch(e){
     $('todayGrid').innerHTML =
       `<div class="empty">Gagal memuat data.<br><small>${esc(e.message)}</small><br><small>Pastikan URL_APPSCRIPT benar & deployment akses "Anyone".</small></div>`;
   }
+}
+
+/* ====== EFEKTIVITAS PENYELESAIAN ====== */
+function renderEff(t){
+  const doneAll = DATA.filter(d=>isDone(d.status));
+  const timed = doneAll.map(d=>({d, n:daysBetween(d.tanggal,d.selesai)})).filter(x=>x.n!==null);
+  const noDate = doneAll.length - timed.length;
+  const open = DATA.filter(d=>!isDone(d.status)).map(d=>({d, n:daysBetween(d.tanggal,t)})).filter(x=>x.n!==null);
+  const unit = u => '<span class="u">'+u+'</span>';
+  const cnt = timed.length;
+  $('targetTag').textContent = 'Target ≤ ' + TARGET_HARI + ' hari';
+
+  // kartu ringkas
+  if(cnt){
+    const avg = timed.reduce((s,x)=>s+x.n,0)/cnt;
+    const onTime = timed.filter(x=>x.n<=TARGET_HARI).length;
+    $('eAvg').innerHTML = fmtNum(avg) + unit(' hari');
+    $('eAvgSub').textContent = 'dari ' + cnt + ' temuan selesai' + (noDate ? ' · ' + noDate + ' tanpa tgl selesai' : '');
+    $('eOnTime').innerHTML = Math.round(onTime/cnt*100) + unit('%');
+    $('eOnTimeSub').textContent = onTime + ' dari ' + cnt + ' selesai ≤ ' + TARGET_HARI + ' hari';
+  } else {
+    $('eAvg').textContent = '–';
+    $('eAvgSub').textContent = doneAll.length ? noDate + ' temuan selesai belum punya tanggal selesai' : 'Belum ada temuan selesai';
+    $('eOnTime').textContent = '–';
+    $('eOnTimeSub').textContent = '';
+  }
+  const late = open.filter(x=>x.n>TARGET_HARI).length;
+  $('eLate').textContent = late;
+  $('eLateSub').textContent = 'dari ' + open.length + ' belum selesai, > ' + TARGET_HARI + ' hari';
+  const oldest = open.slice().sort((a,b)=>b.n-a.n);
+  if(oldest.length){
+    $('eOld').innerHTML = oldest[0].n + unit(' hari');
+    $('eOldSub').textContent = shortTxt(oldest[0].d.keterangan, 32);
+  } else {
+    $('eOld').textContent = '–';
+    $('eOldSub').textContent = 'Tidak ada yang tertunda';
+  }
+
+  // sebaran lama penyelesaian
+  if(cnt){
+    const B = [['Hari yang sama',n=>n===0,'#16a34a'],['1–2 hari',n=>n>=1&&n<=2,'#65a30d'],['3–7 hari',n=>n>=3&&n<=7,'#d97706'],['> 7 hari',n=>n>7,'#dc2626']];
+    $('eDist').innerHTML = '<div class="dist">' + B.map(([lb,fn,col])=>{
+      const c = timed.filter(x=>fn(x.n)).length, p = Math.round(c/cnt*100);
+      return `<div class="dist-row"><span>${lb}</span><div class="dist-track"><i style="width:${p}%;background:${col}"></i></div><span class="dist-val">${c} <small>(${p}%)</small></span></div>`;
+    }).join('') + '</div>';
+  } else {
+    $('eDist').innerHTML = '<div class="empty-s">Belum ada temuan selesai yang punya tanggal selesai.</div>';
+  }
+
+  // tren rata-rata per bulan (6 bulan terakhir, berdasarkan bulan selesai)
+  const [ty,tm] = t.split('-').map(Number), months = [];
+  for(let i=5;i>=0;i--){ const dt = new Date(ty,tm-1-i,1); months.push(dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')); }
+  const agg = {};
+  timed.forEach(x=>{ const k = x.d.selesai.slice(0,7); (agg[k] = agg[k] || []).push(x.n); });
+  const vals = months.map(k => agg[k] ? agg[k].reduce((a,b)=>a+b,0)/agg[k].length : null);
+  if(vals.some(v=>v!==null)){
+    const max = Math.max(TARGET_HARI*1.25, ...vals.filter(v=>v!==null), 1);
+    const lbl = k => { const [y,m] = k.split('-').map(Number); return new Date(y,m-1,1).toLocaleDateString('id-ID',{month:'short',year:'2-digit'}); };
+    $('eTrend').innerHTML = `<div class="trend-plot">
+        <div class="trend-target" style="bottom:${TARGET_HARI/max*100}%"></div>
+        ${vals.map(v => `<div class="trend-col">${v===null ? '' : `<i class="${v<=TARGET_HARI?'ok':'warn'}" style="height:${Math.max(v/max*100,2)}%"><span>${fmtNum(v)}</span></i>`}</div>`).join('')}
+      </div>
+      <div class="trend-labels">${months.map(k => `<div><b>${lbl(k)}</b><small>${agg[k] ? 'n=' + agg[k].length : '–'}</small></div>`).join('')}</div>`;
+  } else {
+    $('eTrend').innerHTML = '<div class="empty-s">Belum ada data tren.</div>';
+  }
+
+  // 5 temuan belum selesai terlama
+  $('eOpen').innerHTML = oldest.length ? oldest.slice(0,5).map(x => `
+    <div class="row" data-i="${DATA.indexOf(x.d)}" tabindex="0" role="button">
+      <div class="th">${imgTag(x.d.foto, x.d.keterangan)}</div>
+      <div class="info">
+        <div class="d">${fmtDate(x.d.tanggal)}</div>
+        <div class="k">${esc(x.d.keterangan)}</div>
+      </div>
+      <span class="badge ${x.n>TARGET_HARI?'bad':'warn'}">${ageText(x.n)}</span>
+    </div>`).join('') : '<div class="empty-s">Semua temuan sudah selesai.</div>';
 }
 
 function render(){
@@ -822,8 +1057,9 @@ function render(){
   $('pct').textContent = pct+'%';
   { const nb=document.getElementById('nav-temuan-badge'); nb.textContent=total-done; nb.hidden=false; }
   $('bar').style.width = pct+'%';
+  renderEff(t);
 
-    const g = $('todayGrid');
+  const g = $('todayGrid');
   g.innerHTML = todayItems.length ? todayItems.map(d=>`
     <div class="item" data-i="${DATA.indexOf(d)}" tabindex="0" role="button">
       <div class="img">${imgTag(d.foto,d.keterangan)}</div>
@@ -847,7 +1083,7 @@ function renderAll(){
     if(f==='open' && isDone(d.status)) return false;
     return true;
   });
-    $('list').innerHTML = items.length ? items.map(d=>`
+  $('list').innerHTML = items.length ? items.map(d=>`
     <div class="row" data-i="${DATA.indexOf(d)}" tabindex="0" role="button">
       <div class="th">${imgTag(d.foto,d.keterangan)}</div>
       <div class="info">
@@ -877,15 +1113,15 @@ $('lb').addEventListener('click',e=>{ if(e.target===$('lb')) closeDetail(); });
 $('lbX').addEventListener('click',closeDetail);
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeDetail(); });
 load();
-setInterval(load, 5*60*1000);
-window.addEventListener('temuan-saved',load); // auto refresh 5 menit
+setInterval(load, 5*60*1000);               // auto refresh 5 menit
+window.addEventListener('temuan-saved',load);
 
 })();</script>
 <script>(function(){
 
   const $ = id => document.getElementById('fm-'+id);
   // ====== URL WEB APP APPS SCRIPT (dipakai untuk membaca daftar & menyimpan) ======
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-vafLbkuu71japxJGQMZxCZ1NDXuj4odhVdVdX1IPkud35j0XYKeu0YONU9kQan8fOw/exec';
+  const URL_APPSCRIPT = "https://script.google.com/macros/s/AKfycbw-vafLbkuu71japxJGQMZxCZ1NDXuj4odhVdVdX1IPkud35j0XYKeu0YONU9kQan8fOw/exec";
   // ================================================================================
 
   const form = $('form'), btn = $('btn'), msg = $('msg');
