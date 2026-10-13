@@ -258,21 +258,42 @@ body.unlocked .app-lock{display:flex}
 /* ===== Modul: Form Temuan (semua selektor di-scope ke #v-form) ===== */
 #v-form{--primary:#1a73e8; --bg:#f1f3f4; --border:#dadce0; --text:#202124;}
 #v-form *{box-sizing:border-box;}
-#v-form{margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); padding:16px;}
-#v-form .card{max-width:560px; margin:24px auto; background:#fff; border-radius:12px; padding:24px; box-shadow:0 1px 4px rgba(0,0,0,.15);}
+#v-form{margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); padding:12px 12px calc(env(safe-area-inset-bottom,0px) + 24px);}
+#v-form .card{max-width:560px; margin:8px auto 24px; background:#fff; border-radius:12px; padding:20px; box-shadow:0 1px 4px rgba(0,0,0,.15);}
 #v-form h1{margin:0 0 4px; font-size:22px;}
-#v-form p.sub{margin:0 0 20px; color:#5f6368; font-size:14px;}
+#v-form p.sub{margin:0 0 16px; color:#5f6368; font-size:14px;}
 #v-form label{display:block; font-weight:600; font-size:14px; margin:16px 0 6px;}
-#v-form input[type=date],#v-form textarea,#v-form select,#v-form input[type=file]{width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:8px; font-size:15px; font-family:inherit; background:#fff;}
+#v-form input[type=date],#v-form textarea,#v-form select,#v-form input[type=file]{width:100%; min-height:46px; padding:10px 12px; border:1px solid var(--border); border-radius:8px; font-size:16px; font-family:inherit; background:#fff; color:var(--text);}
 #v-form textarea{min-height:110px; resize:vertical;}
 #v-form input:focus,#v-form textarea:focus,#v-form select:focus{outline:2px solid var(--primary); border-color:transparent;}
-#v-form #fm-preview{display:none; max-width:100%; max-height:260px; margin-top:10px; border-radius:8px; border:1px solid var(--border);}
-#v-form button{width:100%; margin-top:24px; padding:12px; background:var(--primary); color:#fff; border:0; border-radius:8px; font-size:16px; font-weight:600; cursor:pointer;}
+#v-form #fm-preview,#v-form #fm-current{max-width:100%; max-height:240px; margin-top:10px; border-radius:8px; border:1px solid var(--border);}
+#v-form #fm-preview{display:none;}
+#v-form #fm-current{display:block;}
+#v-form button{width:100%; margin-top:24px; min-height:48px; padding:12px; background:var(--primary); color:#fff; border:0; border-radius:8px; font-size:16px; font-weight:600; cursor:pointer;}
 #v-form button:disabled{background:#9aa0a6; cursor:not-allowed;}
+#v-form button:focus-visible{outline:3px solid #fbbc04; outline-offset:2px;}
+#v-form .fm-tabs{display:flex; gap:4px; background:var(--bg); padding:4px; border-radius:10px;}
+#v-form .fm-tabs button{flex:1; width:auto; margin:0; min-height:42px; padding:8px; background:transparent; color:#5f6368; border-radius:8px; font-size:14px;}
+#v-form .fm-tabs button[aria-selected="true"]{background:#fff; color:var(--primary); box-shadow:0 1px 3px rgba(0,0,0,.18);}
+#v-form label.fm-check{display:flex; align-items:center; gap:8px; font-weight:500; margin:12px 0 0; min-height:32px;}
+#v-form label.fm-check input{width:20px; height:20px; margin:0;}
 #v-form #fm-msg{margin-top:16px; padding:10px 12px; border-radius:8px; font-size:14px; display:none;}
 #v-form #fm-msg.ok{display:block; background:#e6f4ea; color:#137333;}
 #v-form #fm-msg.err{display:block; background:#fce8e6; color:#c5221f;}
 #v-form .req{color:#d93025;}
+@media(min-width:640px){
+  #v-form #fm-cari{width:100%; min-height:46px; padding:10px 12px; border:1px solid var(--border); border-radius:8px; font-size:16px; font-family:inherit; background:#fff; color:var(--text);}
+#v-form .fm-list{display:flex; flex-direction:column; gap:8px; margin-top:12px; max-height:340px; overflow-y:auto; overscroll-behavior:contain; padding:2px;}
+#v-form .fm-note{margin:8px 0; padding:14px; text-align:center; color:#5f6368; font-size:14px; background:var(--bg); border-radius:8px;}
+#v-form .fm-list .fm-opt{display:flex; align-items:center; gap:12px; width:100%; margin:0; min-height:72px; padding:8px; text-align:left; background:#fff; color:var(--text); border:1.5px solid var(--border); border-radius:10px; font-size:14px; font-weight:400; cursor:pointer;}
+#v-form .fm-list .fm-opt.sel{border-color:var(--primary); background:#e8f0fe; box-shadow:0 0 0 1px var(--primary) inset;}
+#v-form .fm-th{width:64px; height:64px; flex:none; border-radius:8px; background:#e2e8f0; overflow:hidden; display:block;}
+#v-form .fm-th img{width:100%; height:100%; object-fit:cover; display:block;}
+#v-form .fm-tx{flex:1; min-width:0; display:flex; flex-direction:column; gap:6px; align-items:flex-start;}
+#v-form .fm-k{font-size:14px; line-height:1.35; overflow-wrap:anywhere; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;}
+#v-form .fm-st{font-size:12px; font-weight:600; padding:2px 8px; border-radius:99px;}
+#v-form .fm-st.ok{background:#e6f4ea; color:#137333;}
+#v-form .fm-st.warn{background:#fef3c7; color:#92400e;}
 /* ===== Penyesuaian akhir (menu samping) ===== */
 
 @media(min-width:900px){
@@ -446,19 +467,33 @@ body.unlocked .app-lock{display:flex}
 </div>
 
 </section>
+html
 <section id="v-form" class="view" hidden>
 <div class="card">
   <h1>Form Temuan</h1>
-  <p class="sub">Isi data temuan lalu kirim. Data masuk ke Google Sheets, foto ke Google Drive.</p>
+  <p class="sub">Catat temuan baru atau perbarui temuan yang sudah dikerjakan. Data masuk ke Google Sheets, foto ke Google Drive.</p>
+
+  <div class="fm-tabs" role="tablist" aria-label="Mode form">
+    <button type="button" role="tab" id="fm-tabBaru" aria-selected="true">Temuan baru</button>
+    <button type="button" role="tab" id="fm-tabEdit" aria-selected="false">Perbarui temuan</button>
+  </div>
 
   <form id="fm-form">
+        <div id="fm-pickWrap" hidden>
+      <label for="fm-cari">Pilih temuan <span class="req">*</span></label>
+      <input type="search" id="fm-cari" placeholder="Cari berdasarkan keterangan temuan…" autocomplete="off">
+      <label class="fm-check"><input type="checkbox" id="fm-onlyOpen" checked> Hanya yang belum selesai</label>
+      <div class="fm-list" id="fm-daftar" role="group" aria-label="Daftar temuan"></div>
+      <img id="fm-current" alt="Foto saat ini" hidden referrerpolicy="no-referrer">
+    </div>
+
     <label for="fm-tanggal">Tanggal <span class="req">*</span></label>
     <input type="date" id="fm-tanggal" name="tanggal" required>
 
     <label for="fm-keterangan">Keterangan Temuan <span class="req">*</span></label>
     <textarea id="fm-keterangan" name="keterangan" placeholder="Tuliskan detail temuan..." required></textarea>
 
-    <label for="fm-foto">Foto <span class="req">*</span></label>
+    <label for="fm-foto"><span id="fm-fotoText">Foto</span> <span class="req" id="fm-fotoReq">*</span></label>
     <input type="file" id="fm-foto" name="foto" accept="image/*" required>
     <img id="fm-preview" alt="Preview foto">
 
@@ -471,7 +506,7 @@ body.unlocked .app-lock{display:flex}
     </select>
 
     <button type="submit" id="fm-btn">Kirim</button>
-    <div id="fm-msg"></div>
+    <div id="fm-msg" role="status"></div>
   </form>
 </div>
 
@@ -849,20 +884,21 @@ window.addEventListener('temuan-saved',load); // auto refresh 5 menit
 <script>(function(){
 
   const $ = id => document.getElementById('fm-'+id);
-  // ====== GANTI DENGAN URL WEB APP APPS SCRIPT ANDA (hasil Deploy) ======
+  // ====== URL WEB APP APPS SCRIPT (dipakai untuk membaca daftar & menyimpan) ======
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-vafLbkuu71japxJGQMZxCZ1NDXuj4odhVdVdX1IPkud35j0XYKeu0YONU9kQan8fOw/exec';
-  // =======================================================================
+  // ================================================================================
 
-  const form = $('form');
-  const btn = $('btn');
-  const msg = $('msg');
-  const fotoInput = $('foto');
-  const preview = $('preview');
+  const form = $('form'), btn = $('btn'), msg = $('msg');
+  const fotoInput = $('foto'), preview = $('preview'), current = $('current');
+  const daftar = $('daftar'), cari = $('cari');
+  let mode = 'baru', items = [], selId = '';
 
-  // Tanggal default = hari ini
-  const now = new Date();
-  $('tanggal').value =
-    now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const isDone = s => /selesai|done|closed|clear|tuntas|beres|ok/i.test(s||'') && !/belum|tidak|not/i.test(s||'');
+  const todayISO = () => new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta'}).format(new Date());
+
+  function show(type, text){ msg.className = type; msg.textContent = text; }
+  function hideMsg(){ msg.className = ''; msg.textContent = ''; }
 
   // Kompres foto agar upload cepat (maks 1600px, JPEG 80%)
   function compressImage(file, maxSize = 1600, quality = 0.8) {
@@ -872,8 +908,7 @@ window.addEventListener('temuan-saved',load); // auto refresh 5 menit
       img.onload = () => {
         let { width, height } = img;
         const scale = Math.min(1, maxSize / Math.max(width, height));
-        width = Math.round(width * scale);
-        height = Math.round(height * scale);
+        width = Math.round(width * scale); height = Math.round(height * scale);
         const canvas = document.createElement('canvas');
         canvas.width = width; canvas.height = height;
         canvas.getContext('2d').drawImage(img, 0, 0, width, height);
@@ -885,28 +920,118 @@ window.addEventListener('temuan-saved',load); // auto refresh 5 menit
     });
   }
 
+  function resetFields(){
+    form.reset();
+    $('tanggal').value = todayISO();
+    preview.style.display = 'none';
+    current.hidden = true; current.removeAttribute('src');
+    selId = '';
+  }
+
+  function setMode(m){
+    mode = m;
+    const edit = m === 'edit';
+    $('tabBaru').setAttribute('aria-selected', String(!edit));
+    $('tabEdit').setAttribute('aria-selected', String(edit));
+    $('pickWrap').hidden = !edit;
+    fotoInput.required = !edit;
+    $('fotoReq').hidden = edit;
+    $('fotoText').textContent = edit ? 'Ganti foto (opsional)' : 'Foto';
+    btn.textContent = edit ? 'Simpan perubahan' : 'Kirim';
+    resetFields(); hideMsg();
+    if (edit) loadItems();
+  }
+
+  /* ====== DAFTAR TEMUAN (mode perbarui) ====== */
+  async function loadItems(){
+    daftar.innerHTML = '<p class="fm-note">Memuat daftar…</p>';
+    try{
+      const res = await fetch(SCRIPT_URL);
+      const json = await res.json();
+      if (!json.ok) throw new Error(json.error || 'Gagal memuat daftar');
+      if (json.data.length && json.data[0].id == null) throw new Error('Apps Script belum diperbarui (data tanpa ID). Deploy ulang Code.gs terbaru.');
+      items = json.data.slice().sort((a,b) => String(b.tanggal).localeCompare(String(a.tanggal)));
+      renderList();
+    }catch(err){
+      daftar.innerHTML = '<p class="fm-note">Gagal memuat daftar.</p>';
+      show('err', 'Error: ' + err.message);
+    }
+  }
+
+  function renderList(){
+    const q = cari.value.trim().toLowerCase(), only = $('onlyOpen').checked;
+    const list = items.filter(d =>
+      (!only || !isDone(d.status)) &&
+      (!q || String(d.keterangan || '').toLowerCase().includes(q)));
+    if (!list.length){
+      daftar.innerHTML = '<p class="fm-note">' + (items.length ? 'Tidak ada temuan yang cocok.' : 'Belum ada temuan.') + '</p>';
+      return;
+    }
+    daftar.innerHTML = list.map(d => {
+      const sel = String(d.id) === selId;
+      return `<button type="button" class="fm-opt${sel ? ' sel' : ''}" data-id="${esc(d.id)}" aria-pressed="${sel}">
+        <span class="fm-th">${d.foto ? `<img src="${esc(d.foto)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}</span>
+        <span class="fm-tx">
+          <span class="fm-k">${esc(d.keterangan || '(Tanpa keterangan temuan)')}</span>
+          <span class="fm-st ${isDone(d.status) ? 'ok' : 'warn'}">${esc(d.status || 'Belum diisi')}</span>
+        </span>
+      </button>`;
+    }).join('');
+  }
+
+  function selectItem(id){
+    const d = items.find(x => String(x.id) === String(id));
+    if (!d) return;
+    selId = String(d.id);
+    daftar.querySelectorAll('.fm-opt').forEach(b => {
+      const on = b.dataset.id === selId;
+      b.classList.toggle('sel', on); b.setAttribute('aria-pressed', String(on));
+    });
+    if (/^\d{4}-\d{2}-\d{2}$/.test(d.tanggal)) $('tanggal').value = d.tanggal;
+    $('keterangan').value = d.keterangan || '';
+    const st = $('status');
+    if (d.status && ![...st.options].some(o => o.value === d.status)) st.add(new Option(d.status, d.status));
+    st.value = d.status || '';
+    if (d.foto){ current.onerror = () => { current.hidden = true; }; current.src = d.foto; current.hidden = false; }
+    else current.hidden = true;
+    hideMsg();
+  }
+
+  daftar.addEventListener('click', e => {
+    const b = e.target.closest('[data-id]');
+    if (b) selectItem(b.dataset.id);
+  });
+  cari.addEventListener('input', renderList);
+  $('onlyOpen').addEventListener('change', renderList);
+  $('tabBaru').addEventListener('click', () => mode !== 'baru' && setMode('baru'));
+  $('tabEdit').addEventListener('click', () => mode !== 'edit' && setMode('edit'));
+
   fotoInput.addEventListener('change', () => {
     const f = fotoInput.files[0];
-    if (f) { preview.src = URL.createObjectURL(f); preview.style.display = 'block'; }
-    else { preview.style.display = 'none'; }
+    if (f){ preview.src = URL.createObjectURL(f); preview.style.display = 'block'; }
+    else preview.style.display = 'none';
   });
 
-  function show(type, text) { msg.className = type; msg.textContent = text; }
-
+  /* ====== KIRIM ====== */
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (SCRIPT_URL.startsWith('PASTE_')) { show('err', 'SCRIPT_URL belum diisi. Lihat petunjuk setup.'); return; }
+    const edit = mode === 'edit';
+    if (edit && !selId){ show('err', 'Pilih temuan yang ingin diperbarui dari daftar terlebih dahulu.'); return; }
 
-    btn.disabled = true; btn.textContent = 'Mengirim...'; msg.className = ''; msg.style.display = 'none';
+    btn.disabled = true; btn.textContent = 'Mengirim...'; hideMsg();
     try {
-      const dataUrl = await compressImage(fotoInput.files[0]);
       const payload = {
+        action: edit ? 'update' : 'create',
         tanggal: form.tanggal.value,
         keterangan: form.keterangan.value.trim(),
-        status: form.status.value,
-        fotoBase64: dataUrl.split(',')[1],
-        fotoNama: 'temuan_' + form.tanggal.value + '_' + Date.now() + '.jpg'
+        status: form.status.value
       };
+      if (edit) payload.id = selId;
+      if (fotoInput.files[0]){
+        const dataUrl = await compressImage(fotoInput.files[0]);
+        payload.fotoBase64 = dataUrl.split(',')[1];
+        payload.fotoNama = 'temuan_' + form.tanggal.value + '_' + Date.now() + '.jpg';
+      }
 
       // text/plain agar tidak memicu preflight CORS di Apps Script
       const res = await fetch(SCRIPT_URL, {
@@ -917,18 +1042,18 @@ window.addEventListener('temuan-saved',load); // auto refresh 5 menit
       const json = await res.json();
       if (!json.success) throw new Error(json.error || 'Gagal menyimpan');
 
-      show('ok', 'Berhasil disimpan ✔');
-      window.dispatchEvent(new Event('temuan-saved'));
-      form.reset();
-      preview.style.display = 'none';
-      $('tanggal').value =
-        now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+      window.dispatchEvent(new Event('temuan-saved'));   // dashboard ikut dimuat ulang
+      resetFields();
+      show('ok', edit ? 'Perubahan tersimpan ✔' : 'Berhasil disimpan ✔');
+      if (edit) loadItems();
     } catch (err) {
       show('err', 'Error: ' + err.message);
     } finally {
-      btn.disabled = false; btn.textContent = 'Kirim';
+      btn.disabled = false; btn.textContent = edit ? 'Simpan perubahan' : 'Kirim';
     }
   });
+
+  $('tanggal').value = todayISO();
 
 })();</script>
 <script>
