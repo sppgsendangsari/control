@@ -208,8 +208,18 @@ body.unlocked .app-lock{display:flex}
 #v-temuan .row .info .k{font-size:.88rem;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 #v-temuan button.reload{background:var(--primary);color:#fff;border:0;padding:8px 14px;border-radius:10px;font-size:.8rem;margin-top:10px;cursor:pointer}
 #v-temuan .loading{text-align:center;padding:30px;color:var(--muted)}
-#v-temuan #tm-lb{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;z-index:50;padding:14px}
-#v-temuan #tm-lb img{max-width:100%;max-height:100%;border-radius:8px}
+#v-temuan .item,#v-temuan .row{cursor:pointer}
+#v-temuan .item:focus-visible,#v-temuan .row:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+#v-temuan .item .img{cursor:pointer}
+#v-temuan #tm-lb{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:14px}
+#v-temuan .dt-box{background:#fff;border-radius:16px;width:100%;max-width:560px;max-height:92vh;overflow:auto;position:relative}
+#v-temuan .dt-img{background:#0f172a;color:#cbd5e1;text-align:center;font-size:.85rem}
+#v-temuan .dt-img img{width:100%;max-height:60vh;object-fit:contain;display:block}
+#v-temuan .dt-img .nofoto{padding:40px 16px}
+#v-temuan .dt-body{padding:14px 16px 18px}
+#v-temuan .dt-date{font-size:.8rem;color:var(--muted);margin-bottom:6px}
+#v-temuan .dt-ket{margin-top:10px;font-size:.95rem;white-space:pre-wrap;overflow-wrap:anywhere}
+#v-temuan .dt-x{position:absolute;top:8px;right:8px;width:36px;height:36px;border:0;border-radius:10px;background:rgba(0,0,0,.55);color:#fff;font-size:16px;cursor:pointer;z-index:2}
 @media(min-width:640px){#v-temuan .stats{grid-template-columns:repeat(4,1fr)}
 #v-temuan .grid{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:960px){#v-temuan .grid{grid-template-columns:repeat(3,1fr)}
@@ -392,7 +402,17 @@ body.unlocked .app-lock{display:flex}
   <div id="tm-list" class="list"></div>
 </div>
 
-<div id="tm-lb"><img id="tm-lbImg" alt="Foto temuan"></div>
+<div id="tm-lb" role="dialog" aria-modal="true" aria-label="Detail temuan">
+  <div class="dt-box">
+    <button type="button" class="dt-x" id="tm-lbX" aria-label="Tutup">✕</button>
+    <div class="dt-img" id="tm-lbImgWrap"></div>
+    <div class="dt-body">
+      <div class="dt-date" id="tm-lbDate"></div>
+      <div id="tm-lbBadge"></div>
+      <p class="dt-ket" id="tm-lbKet"></p>
+    </div>
+  </div>
+</div>
 
 </section>
 <section id="v-form" class="view" hidden>
@@ -693,7 +713,17 @@ const imgTag = (u,alt) => u
   : 'Tanpa foto';
 const badge = s => `<span class="badge ${isDone(s)?'ok':'warn'}">${esc(s||'Belum diisi')}</span>`;
 
-function openImg(u){ if(!u) return; $('lbImg').src=u; $('lb').style.display='flex'; }
+function openDetail(i){
+  const d = DATA[i]; if(!d) return;
+  $('lbImgWrap').innerHTML = d.foto
+    ? `<img id="tm-lbImg" src="${esc(d.foto)}" alt="Foto temuan" referrerpolicy="no-referrer" onerror="this.parentNode.innerHTML='<div class=&quot;nofoto&quot;>Foto tidak tersedia</div>'">`
+    : '<div class="nofoto">Tanpa foto</div>';
+  $('lbDate').textContent = fmtDate(d.tanggal);
+  $('lbBadge').innerHTML = badge(d.status);
+  $('lbKet').textContent = d.keterangan || '(Tanpa keterangan)';
+  $('lb').style.display = 'flex';
+}
+function closeDetail(){ $('lb').style.display = 'none'; $('lbImgWrap').innerHTML = ''; }
 
 async function load(){
   $('todayGrid').innerHTML='<div class="loading">Memuat data…</div>';
@@ -730,7 +760,8 @@ function render(){
   const g = $('todayGrid');
   g.innerHTML = todayItems.length ? todayItems.map((d)=>`
     <div class="item">
-      <div class="img" data-img="${esc(d.foto)}">${imgTag(d.foto,d.keterangan)}</div>
+      <div class="item" data-i="${DATA.indexOf(d)}" tabindex="0" role="button">
+        <div class="img">${imgTag(d.foto,d.keterangan)}</div>
       <div class="body">
         <div class="date">${fmtDate(d.tanggal)}</div>
         <div class="ket">${esc(d.keterangan)}</div>
@@ -753,7 +784,8 @@ function renderAll(){
   });
   $('list').innerHTML = items.length ? items.map(d=>`
     <div class="row">
-      <div class="th" data-img="${esc(d.foto)}">${imgTag(d.foto,d.keterangan)}</div>
+      <div class="row" data-i="${DATA.indexOf(d)}" tabindex="0" role="button">
+        <div class="th">${imgTag(d.foto,d.keterangan)}</div>
       <div class="info">
         <div class="d">${fmtDate(d.tanggal)}</div>
         <div class="k">${esc(d.keterangan)}</div>
@@ -762,16 +794,24 @@ function renderAll(){
     </div>`).join('') : '<div class="empty">Data tidak ditemukan.</div>';
 }
 
-// klik foto -> perbesar
+// klik card -> detail (foto + keterangan)
 root.addEventListener('click',e=>{
-  const el = e.target.closest('[data-img]');
-  if(el) openImg(el.dataset.img);
+  const el = e.target.closest('[data-i]');
+  if(el) openDetail(+el.dataset.i);
+});
+root.addEventListener('keydown',e=>{
+  if(e.key==='Enter' || e.key===' '){
+    const el = e.target.closest('[data-i]');
+    if(el){ e.preventDefault(); openDetail(+el.dataset.i); }
+  }
 });
 
 $('reload').addEventListener('click',load);
 $('q').addEventListener('input',renderAll);
 $('f').addEventListener('change',renderAll);
-$('lb').addEventListener('click',()=>{$('lb').style.display='none';});
+$('lb').addEventListener('click',e=>{ if(e.target===$('lb')) closeDetail(); });
+$('lbX').addEventListener('click',closeDetail);
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeDetail(); });
 load();
 setInterval(load, 5*60*1000);
 window.addEventListener('temuan-saved',load); // auto refresh 5 menit
