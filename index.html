@@ -168,16 +168,18 @@ body.unlocked .app-lock{display:flex}
 /* ===== Modul: Dashboard Temuan (semua selektor di-scope ke #v-temuan) ===== */
 #v-temuan{--bg:#f4f6fb; --card:#fff; --text:#1e293b; --muted:#64748b; --line:#e2e8f0;
     --primary:#2563eb; --ok:#16a34a; --warn:#d97706; --bad:#dc2626;}
-#v-temuan *{box-sizing:border-box;margin:0;padding:0}
-#v-temuan{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.45}
-#v-temuan header{background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;padding:18px 16px 56px}
+#v-temuan *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+#v-temuan{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.45;overflow-x:hidden}
+#v-temuan header{background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;padding:16px 0 56px}
 #v-temuan header h1{font-size:1.25rem}
 #v-temuan header p{font-size:.85rem;opacity:.9;margin-top:2px}
-#v-temuan .wrap{max-width:1100px;margin:0 auto;padding:0 14px 40px}
-#v-temuan .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:-40px}
-#v-temuan .stat{background:var(--card);border-radius:14px;padding:14px;box-shadow:0 2px 8px rgba(15,23,42,.08)}
+#v-temuan .wrap{max-width:1100px;margin:0 auto;padding:0 14px calc(env(safe-area-inset-bottom,0px) + 40px)}
+
+/* statistik */
+#v-temuan .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:-40px}
+#v-temuan .stat{background:var(--card);border-radius:14px;padding:12px;box-shadow:0 2px 8px rgba(15,23,42,.08);min-width:0}
 #v-temuan .stat small{color:var(--muted);font-size:.75rem;display:block}
-#v-temuan .stat b{font-size:1.7rem;display:block;margin-top:2px}
+#v-temuan .stat b{font-size:1.5rem;display:block;margin-top:2px}
 #v-temuan .stat.ok b{color:var(--ok)}
 #v-temuan .stat.warn b{color:var(--warn)}
 #v-temuan .progress{background:var(--card);border-radius:14px;padding:14px;margin-top:10px;box-shadow:0 2px 8px rgba(15,23,42,.08)}
@@ -186,44 +188,73 @@ body.unlocked .app-lock{display:flex}
 #v-temuan .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#22c55e,#16a34a);border-radius:99px;transition:width .6s}
 #v-temuan h2{font-size:1.05rem;margin:22px 0 10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 #v-temuan h2 span.tag{font-size:.7rem;font-weight:600;background:#dbeafe;color:#1d4ed8;padding:2px 8px;border-radius:99px}
-#v-temuan .grid{display:grid;grid-template-columns:1fr;gap:12px}
-#v-temuan .item{background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(15,23,42,.08);display:flex;flex-direction:column}
-#v-temuan .item .img{aspect-ratio:4/3;background:#e2e8f0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.85rem;cursor:zoom-in}
+
+/* kartu "Temuan Hari Ini" */
+#v-temuan .grid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+#v-temuan .item{background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(15,23,42,.08);display:flex;flex-direction:column;cursor:pointer;min-width:0}
+#v-temuan .item .img{aspect-ratio:16/10;background:#e2e8f0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.85rem}
 #v-temuan .item .img img{width:100%;height:100%;object-fit:cover;display:block}
 #v-temuan .item .body{padding:12px 14px}
 #v-temuan .item .date{font-size:.75rem;color:var(--muted)}
-#v-temuan .item .ket{margin:4px 0 8px;font-size:.95rem}
+#v-temuan .item .ket{margin:4px 0 8px;font-size:.95rem;overflow-wrap:anywhere}
 #v-temuan .badge{display:inline-block;font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:99px}
 #v-temuan .badge.ok{background:#dcfce7;color:#166534}
 #v-temuan .badge.warn{background:#fef3c7;color:#92400e}
 #v-temuan .empty{background:var(--card);border-radius:14px;padding:22px;text-align:center;color:var(--muted);box-shadow:0 2px 8px rgba(15,23,42,.06)}
-#v-temuan .tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-#v-temuan .tools select,#v-temuan .tools input{flex:1;min-width:130px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:.9rem;background:#fff}
+
+/* pencarian & filter: bertumpuk di HP, sejajar di layar lebar */
+#v-temuan .tools{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+#v-temuan .tools select,#v-temuan .tools input{width:100%;min-height:46px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit;font-size:16px;background:#fff;color:var(--text)}
+
+/* daftar "Semua Temuan" */
 #v-temuan .list{display:flex;flex-direction:column;gap:8px}
-#v-temuan .row{background:var(--card);border-radius:12px;padding:10px;display:flex;gap:10px;align-items:center;box-shadow:0 1px 4px rgba(15,23,42,.06)}
-#v-temuan .row .th{width:56px;height:56px;border-radius:8px;background:#e2e8f0;flex:none;overflow:hidden;cursor:zoom-in;display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--muted)}
+#v-temuan .row{background:var(--card);border-radius:12px;padding:10px;display:flex;gap:10px;align-items:center;box-shadow:0 1px 4px rgba(15,23,42,.06);cursor:pointer;min-width:0}
+#v-temuan .row .th{width:60px;height:60px;border-radius:8px;background:#e2e8f0;flex:none;overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;font-size:.65rem;color:var(--muted)}
 #v-temuan .row .th img{width:100%;height:100%;object-fit:cover}
 #v-temuan .row .info{flex:1;min-width:0}
 #v-temuan .row .info .d{font-size:.72rem;color:var(--muted)}
-#v-temuan .row .info .k{font-size:.88rem;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-#v-temuan button.reload{background:var(--primary);color:#fff;border:0;padding:8px 14px;border-radius:10px;font-size:.8rem;margin-top:10px;cursor:pointer}
+#v-temuan .row .info .k{font-size:.88rem;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
+#v-temuan .row .badge{flex:none;max-width:34%;text-align:center;line-height:1.25}
+#v-temuan button.reload{background:var(--primary);color:#fff;border:0;padding:0 16px;min-height:40px;border-radius:10px;font-size:.85rem;margin-top:10px;cursor:pointer}
 #v-temuan .loading{text-align:center;padding:30px;color:var(--muted)}
-#v-temuan .item,#v-temuan .row{cursor:pointer}
 #v-temuan .item:focus-visible,#v-temuan .row:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
-#v-temuan .item .img{cursor:pointer}
-#v-temuan #tm-lb{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:14px}
-#v-temuan .dt-box{background:#fff;border-radius:16px;width:100%;max-width:560px;max-height:92vh;overflow:auto;position:relative}
+
+/* detail: tampil sebagai panel dari bawah di HP */
+#v-temuan #tm-lb{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:flex-end;justify-content:center;z-index:50;padding:0}
+#v-temuan .dt-box{background:#fff;border-radius:18px 18px 0 0;width:100%;max-width:560px;max-height:92vh;max-height:92dvh;overflow:auto;overscroll-behavior:contain;position:relative}
 #v-temuan .dt-img{background:#0f172a;color:#cbd5e1;text-align:center;font-size:.85rem}
-#v-temuan .dt-img img{width:100%;max-height:60vh;object-fit:contain;display:block}
+#v-temuan .dt-img img{width:100%;max-height:50vh;max-height:50dvh;object-fit:contain;display:block}
 #v-temuan .dt-img .nofoto{padding:40px 16px}
-#v-temuan .dt-body{padding:14px 16px 18px}
+#v-temuan .dt-body{padding:14px 16px calc(env(safe-area-inset-bottom,0px) + 20px)}
 #v-temuan .dt-date{font-size:.8rem;color:var(--muted);margin-bottom:6px}
 #v-temuan .dt-ket{margin-top:10px;font-size:.95rem;white-space:pre-wrap;overflow-wrap:anywhere}
-#v-temuan .dt-x{position:absolute;top:8px;right:8px;width:36px;height:36px;border:0;border-radius:10px;background:rgba(0,0,0,.55);color:#fff;font-size:16px;cursor:pointer;z-index:2}
-@media(min-width:640px){#v-temuan .stats{grid-template-columns:repeat(4,1fr)}
-#v-temuan .grid{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:960px){#v-temuan .grid{grid-template-columns:repeat(3,1fr)}
-#v-temuan header h1{font-size:1.5rem}}
+#v-temuan .dt-x{position:absolute;top:10px;right:10px;width:44px;height:44px;border:0;border-radius:12px;background:rgba(0,0,0,.6);color:#fff;font-size:18px;cursor:pointer;z-index:2}
+
+/* HP kecil */
+@media(max-width:359px){
+  #v-temuan .stat b{font-size:1.3rem}
+  #v-temuan .row .th{width:52px;height:52px}
+}
+/* tablet */
+@media(min-width:640px){
+  #v-temuan header{padding-top:18px}
+  #v-temuan .wrap{padding-left:20px;padding-right:20px}
+  #v-temuan .stats{grid-template-columns:repeat(4,minmax(0,1fr))}
+  #v-temuan .stat b{font-size:1.7rem}
+  #v-temuan .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #v-temuan .item .img{aspect-ratio:4/3}
+  #v-temuan .tools{flex-direction:row}
+  #v-temuan .tools input{flex:2}
+  #v-temuan .tools select{flex:1}
+  #v-temuan #tm-lb{align-items:center;padding:14px}
+  #v-temuan .dt-box{border-radius:16px}
+  #v-temuan .dt-body{padding-bottom:18px}
+}
+/* desktop */
+@media(min-width:960px){
+  #v-temuan .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  #v-temuan header h1{font-size:1.5rem}
+}
 /* ===== Modul: Form Temuan (semua selektor di-scope ke #v-form) ===== */
 #v-form{--primary:#1a73e8; --bg:#f1f3f4; --border:#dadce0; --text:#202124;}
 #v-form *{box-sizing:border-box;}
@@ -757,11 +788,10 @@ function render(){
   { const nb=document.getElementById('nav-temuan-badge'); nb.textContent=total-done; nb.hidden=false; }
   $('bar').style.width = pct+'%';
 
-  const g = $('todayGrid');
-  g.innerHTML = todayItems.length ? todayItems.map((d)=>`
-    <div class="item">
-      <div class="item" data-i="${DATA.indexOf(d)}" tabindex="0" role="button">
-        <div class="img">${imgTag(d.foto,d.keterangan)}</div>
+    const g = $('todayGrid');
+  g.innerHTML = todayItems.length ? todayItems.map(d=>`
+    <div class="item" data-i="${DATA.indexOf(d)}" tabindex="0" role="button">
+      <div class="img">${imgTag(d.foto,d.keterangan)}</div>
       <div class="body">
         <div class="date">${fmtDate(d.tanggal)}</div>
         <div class="ket">${esc(d.keterangan)}</div>
@@ -782,10 +812,9 @@ function renderAll(){
     if(f==='open' && isDone(d.status)) return false;
     return true;
   });
-  $('list').innerHTML = items.length ? items.map(d=>`
-    <div class="row">
-      <div class="row" data-i="${DATA.indexOf(d)}" tabindex="0" role="button">
-        <div class="th">${imgTag(d.foto,d.keterangan)}</div>
+    $('list').innerHTML = items.length ? items.map(d=>`
+    <div class="row" data-i="${DATA.indexOf(d)}" tabindex="0" role="button">
+      <div class="th">${imgTag(d.foto,d.keterangan)}</div>
       <div class="info">
         <div class="d">${fmtDate(d.tanggal)}</div>
         <div class="k">${esc(d.keterangan)}</div>
