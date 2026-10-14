@@ -262,6 +262,7 @@ body.unlocked .app-lock{display:flex}
 /* badge & detail */
 #v-temuan .badge.bad{background:#fee2e2;color:#991b1b}
 #v-temuan .dt-dur{font-size:.82rem;color:var(--muted);margin-top:8px}
+#v-form .fm-retry{width:auto; margin-top:12px; min-height:40px; padding:0 18px; font-size:14px;}
 @media(min-width:640px){ #v-temuan .eff-kpis{grid-template-columns:repeat(4,minmax(0,1fr))} }
 @media(min-width:800px){ #v-temuan .eff-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
 
@@ -1121,7 +1122,7 @@ window.addEventListener('temuan-saved',load);
 
   const $ = id => document.getElementById('fm-'+id);
   // ====== URL WEB APP APPS SCRIPT (dipakai untuk membaca daftar & menyimpan) ======
-  const URL_APPSCRIPT = "https://script.google.com/macros/s/AKfycbw-vafLbkuu71japxJGQMZxCZ1NDXuj4odhVdVdX1IPkud35j0XYKeu0YONU9kQan8fOw/exec";
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-vafLbkuu71japxJGQMZxCZ1NDXuj4odhVdVdX1IPkud35j0XYKeu0YONU9kQan8fOw/exec';
   // ================================================================================
 
   const form = $('form'), btn = $('btn'), msg = $('msg');
@@ -1184,13 +1185,18 @@ window.addEventListener('temuan-saved',load);
     try{
       const res = await fetch(SCRIPT_URL);
       const json = await res.json();
-      if (!json.ok) throw new Error(json.error || 'Gagal memuat daftar');
-      if (json.data.length && json.data[0].id == null) throw new Error('Apps Script belum diperbarui (data tanpa ID). Deploy ulang Code.gs terbaru.');
+      if (!json.ok) throw new Error(json.error || 'Apps Script membalas ok:false tanpa pesan');
+      if (!Array.isArray(json.data)) throw new Error('Format respons tidak dikenali (tidak ada "data"). URL ini kemungkinan masih deployment lama.');
+      if (json.data.length && json.data[0].id == null) throw new Error('Data tanpa ID. Code.gs terbaru belum di-deploy (New version).');
       items = json.data.slice().sort((a,b) => String(b.tanggal).localeCompare(String(a.tanggal)));
       renderList();
     }catch(err){
-      daftar.innerHTML = '<p class="fm-note">Gagal memuat daftar.</p>';
-      show('err', 'Error: ' + err.message);
+      let detail = err.message;
+      if (err instanceof TypeError) detail = 'Tidak bisa terhubung ke Apps Script. Cek akses deployment "Anyone" dan pastikan sudah di-deploy ulang.';
+      else if (err instanceof SyntaxError) detail = 'Apps Script membalas halaman error, bukan JSON. Buka URL langsung di browser untuk melihat pesannya.';
+      daftar.innerHTML = '<p class="fm-note"><b>Gagal memuat daftar.</b><br>' + esc(detail) +
+        '<br><button type="button" class="fm-retry" id="fm-retry">Coba lagi</button></p>';
+      $('retry').onclick = loadItems;
     }
   }
 
